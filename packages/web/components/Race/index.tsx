@@ -22,16 +22,19 @@ interface Props {
   text: string;
 }
 
+const DEFAULT_COUNTDOWN = 5;
+
 export const Race: FunctionComponent<Props> = ({ text }) => {
   const [currentRaceState, setCurrentRaceState] = useState(RaceState.WAITING);
-  const [currentCountdown, setCurrentCountdown] = useState(5);
+  const [currentCountdown, setCurrentCountdown] = useState(DEFAULT_COUNTDOWN);
   const [currentProgress, setCurrentProgress] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   function restartRace() {
     setCurrentRaceState(RaceState.WAITING);
-    setCurrentCountdown(5);
-    setCurrentIndex(0);
+    setCurrentCountdown(DEFAULT_COUNTDOWN);
+    setCurrentProgress(0);
+    setCurrentWordIndex(0);
   }
 
   useEffect(() => {
@@ -61,20 +64,18 @@ export const Race: FunctionComponent<Props> = ({ text }) => {
         </ModalContent>
       </Modal>
       <Progress hasStripe marginTop="1rem" value={currentProgress} />
-      <RaceParagraph text={text} currentIndex={currentIndex} />
+      <RaceParagraph text={text} currentIndex={currentWordIndex} />
       <RaceInput
         text={text}
-        currentIndex={currentIndex}
+        currentWordIndex={currentWordIndex}
         onSuccessfulLetter={(i: number) => {
-          console.log(
-            i + 1,
-            text.split(' ').join(''),
-            text.split(' ').join('').length,
-          );
+          const totalLength = text.split(' ').join('').length;
 
-          setCurrentProgress(((i + 1) / text.split(' ').join('').length) * 100);
+          console.log((i / totalLength) * 100);
+
+          setCurrentProgress((i / totalLength) * 100);
         }}
-        onSuccessfulWord={() => setCurrentIndex(currentIndex + 1)}
+        onSuccessfulWord={() => setCurrentWordIndex(currentWordIndex + 1)}
         onReset={() => {
           restartRace();
         }}
