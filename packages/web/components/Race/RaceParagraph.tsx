@@ -16,6 +16,8 @@ export const RaceParagraph: FunctionComponent<Props> = ({
     <Box
       padding="0.5rem"
       margin="1rem 0 1rem 0"
+      display="flex"
+      flexWrap="wrap"
       border={`${theme.borders['1px']} ${theme.colors.gray[700]}`}
       borderRadius={theme.radii.md}
     >

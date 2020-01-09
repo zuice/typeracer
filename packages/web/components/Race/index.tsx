@@ -71,15 +71,14 @@ export const Race: FunctionComponent<Props> = ({ text }) => {
         onSuccessfulLetter={(i: number) => {
           const totalLength = text.split(' ').join('').length;
 
-          console.log((i / totalLength) * 100);
-
           setCurrentProgress((i / totalLength) * 100);
         }}
         onSuccessfulWord={() => setCurrentWordIndex(currentWordIndex + 1)}
-        onReset={() => {
-          restartRace();
+        onReset={() => restartRace()}
+        onCompleted={() => {
+          setCurrentRaceState(RaceState.COMPLETED);
+          setCurrentWordIndex(0);
         }}
-        onCompleted={() => setCurrentRaceState(RaceState.COMPLETED)}
         disabled={currentRaceState !== RaceState.IN_PROGRESS}
       />
     </Box>

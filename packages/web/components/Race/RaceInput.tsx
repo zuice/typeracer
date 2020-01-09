@@ -64,20 +64,9 @@ export const RaceInput: FunctionComponent<Props> = ({
     }
   };
 
-  const handleBackspace = () => {
-    if (currentInputValue !== '' && !hasError) {
-      setCurrentLetterIndex(currentLetterIndex - 1);
-      setCurrentGlobalIndex(currentGlobalIndex - 1);
-
-      onSuccessfulLetter(currentGlobalIndex);
-    }
-  };
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.which === 32) {
       handleSpacebar(e);
-    } else if (e.which === 8) {
-      handleBackspace();
     }
   };
 
@@ -95,6 +84,23 @@ export const RaceInput: FunctionComponent<Props> = ({
     }
   };
 
+  const handleCheckBackspace = (newValue: string) => {
+    const currentWordNewValueMatch = currentWord.slice(0, newValue.length);
+
+    if (
+      newValue.length < currentInputValue.length &&
+      newValue === currentWordNewValueMatch &&
+      newValue !== ''
+    ) {
+      const difference = currentInputValue.length - newValue.length;
+
+      setCurrentLetterIndex(currentLetterIndex - difference);
+      setCurrentGlobalIndex(currentGlobalIndex - difference);
+
+      onSuccessfulLetter(currentGlobalIndex);
+    }
+  };
+
   const handleCheckError = () => {
     const isInputErroneous =
       currentWord.slice(0, currentLetterIndex) !== currentInputValue;
@@ -106,17 +112,26 @@ export const RaceInput: FunctionComponent<Props> = ({
     }
   };
 
+  const handleCompleted = () => {
+    onCompleted();
+
+    setCurrentLetterIndex(0);
+    setCurrentGlobalIndex(0);
+    setCurrentInputValue('');
+  };
+
   const handleCheckFinalWord = () => {
     const lastWordIndex = text.split(' ').length - 1;
 
     if (currentWordIndex === lastWordIndex) {
       if (currentInputValue === currentWord) {
-        onCompleted();
+        handleCompleted();
       }
     }
   };
 
   const handleChange = (inputValue: string) => {
+    handleCheckBackspace(inputValue);
     setCurrentInputValue(inputValue);
 
     handleCheckLetterValidity();
@@ -155,7 +170,7 @@ export const RaceInput: FunctionComponent<Props> = ({
           />
         </Box>
         <Box paddingLeft="0.1rem">
-          <Button onClick={handleClick} isDisabled={disabled}>
+          <Button onClick={handleClick}>
             <Icon name="repeat-clock" />
           </Button>
         </Box>
