@@ -1,4 +1,3 @@
 {
-  "jest.pathToJest": "node_modules/.bin/jest",
-  "jest.showCoverageOnLoad": true
+  "jest.pathToJest": "node_modules/.bin/jest"
 }
