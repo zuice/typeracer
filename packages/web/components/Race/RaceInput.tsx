@@ -1,4 +1,4 @@
-import {
+import React, {
   FunctionComponent,
   useState,
   createRef,
@@ -6,14 +6,13 @@ import {
   ChangeEvent,
   KeyboardEvent,
 } from 'react';
-import { Box, Input, theme, Button, Icon } from '@chakra-ui/core';
+import { Box, Input, theme } from '@chakra-ui/core';
 
 interface Props {
   text: string;
   currentWordIndex: number;
   onSuccessfulLetter: (i: number) => void;
   onSuccessfulWord: () => void;
-  onReset: () => void;
   onCompleted: () => void;
   disabled: boolean;
 }
@@ -27,7 +26,6 @@ export const RaceInput: FunctionComponent<Props> = ({
   currentWordIndex,
   onSuccessfulLetter,
   onSuccessfulWord,
-  onReset,
   onCompleted,
   disabled,
 }) => {
@@ -76,7 +74,11 @@ export const RaceInput: FunctionComponent<Props> = ({
       currentInputValue.length,
     );
 
-    if (letter === currentWord[currentLetterIndex]) {
+    if (
+      letter === currentWord[currentLetterIndex] &&
+      letter !== '' &&
+      currentWord[currentLetterIndex] !== ''
+    ) {
       setCurrentLetterIndex(currentLetterIndex + 1);
       setCurrentGlobalIndex(currentGlobalIndex + 1);
 
@@ -87,10 +89,12 @@ export const RaceInput: FunctionComponent<Props> = ({
   const handleCheckBackspace = (newValue: string) => {
     const currentWordNewValueMatch = currentWord.slice(0, newValue.length);
 
+    console.log(currentGlobalIndex);
+
     if (
-      newValue.length < currentInputValue.length &&
-      newValue === currentWordNewValueMatch &&
-      newValue !== ''
+      (newValue.length < currentInputValue.length &&
+        newValue === currentWordNewValueMatch) ||
+      (newValue !== '' && currentWordNewValueMatch !== '')
     ) {
       const difference = currentInputValue.length - newValue.length;
 
@@ -105,7 +109,11 @@ export const RaceInput: FunctionComponent<Props> = ({
     const isInputErroneous =
       currentWord.slice(0, currentLetterIndex) !== currentInputValue;
 
-    if (isInputErroneous) {
+    if (
+      isInputErroneous &&
+      currentWord.slice(0, currentLetterIndex) !== '' &&
+      currentInputValue !== ''
+    ) {
       setError('Spelling mistake!');
     } else {
       setError('');
@@ -139,14 +147,6 @@ export const RaceInput: FunctionComponent<Props> = ({
     handleCheckFinalWord();
   };
 
-  const handleClick = () => {
-    setValue('');
-    setCurrentInputValue('');
-    setCurrentGlobalIndex(0);
-    setCurrentLetterIndex(0);
-    onReset();
-  };
-
   useEffect(() => {
     inputRef.current.focus();
   });
@@ -168,11 +168,6 @@ export const RaceInput: FunctionComponent<Props> = ({
               handleChange(e.target.value)
             }
           />
-        </Box>
-        <Box paddingLeft="0.1rem">
-          <Button onClick={handleClick}>
-            <Icon name="repeat-clock" />
-          </Button>
         </Box>
       </Box>
       <Box>
