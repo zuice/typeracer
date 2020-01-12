@@ -4,19 +4,19 @@ jobs:
     docker:
       - image: circleci/node:7.10
 
-    working_directory: ~/typeracer/packages/web
+    working_directory: ~/typeracer
 
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "packages/web/package.json" }}
 
       - run: yarn install
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "packages/web/package.json" }}
 
       - run: yarn test
