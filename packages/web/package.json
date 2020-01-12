@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "test": "jest --verbose --watch",
+    "test": "jest",
     "start": "next start"
   },
   "dependencies": {

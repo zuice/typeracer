@@ -1,0 +1,21 @@
+{
+  "name": "typeracer",
+  "version": "0.0.1",
+  "description": "TypeRacer clone in Next.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "lerna run test --scope={@typeracer/web,}"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "lerna": "^3.20.2"
+  },
+  "repository": "https://github.com/zuice/typeracer.git",
+  "author": "zuice <jeff.allen127@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
