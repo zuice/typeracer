@@ -12,6 +12,7 @@ jobs:
       - restore_cache:
           key: v1-dependencies-{{ checksum "packages/web/package.json" }}
 
+      - run: cd packages/web
       - run: yarn install
 
       - save_cache:
